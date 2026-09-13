@@ -9,7 +9,12 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
-  try{ var _s=JSON.parse(localStorage.getItem("s7l_settings_v1")||"{}"); document.documentElement.setAttribute("data-theme", _s.theme==="light"?"light":"dark"); }catch(e){}
+  /* ====== إعدادات Supabase — عدّل القيمتين فقط ======
+     من: Supabase → Project Settings → API                */
+   var SUPA_URL = "https://ssxcigalyvguxbkgmfre.supabase.co";
+   var SUPA_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzeGNpZ2FseXZndXhia2dtZnJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyODk4MDYsImV4cCI6MjEwNDg2NTgwNn0.C9Ioflo45PhalrTatYSHzbPooZ133T5jBW-nfZ07NGo";
+  /* ================================================= */
+  try{ var _s=(JSON.parse(localStorage.getItem("s7l_theme")||"{}")); document.documentElement.setAttribute("data-theme", _s.theme==="light"?"light":"dark"); }catch(e){}
 </script>
 <style>
   :root, :root[data-theme="dark"]{
@@ -42,7 +47,7 @@
     background:radial-gradient(1100px 600px at 100% -10%,var(--glow1) 0,transparent 55%),radial-gradient(900px 500px at -10% 110%,var(--glow2) 0,transparent 50%),var(--bg-0);
     min-height:100vh;padding:24px 16px 48px;line-height:1.55;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
   .wrap{max-width:1060px;margin:0 auto}
-  header{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+  header{display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap}
   .logo{width:46px;height:46px;border-radius:13px;flex:none;display:grid;place-items:center;background:linear-gradient(150deg,#0ea5e9,#22d3ee);box-shadow:0 8px 24px -8px var(--accent),inset 0 1px 0 rgba(255,255,255,.35);color:#04121f;font-weight:800;font-family:var(--mono);font-size:18px}
   .h-txt h1{font-size:20px;font-weight:800;margin:0;letter-spacing:-.2px}
   .h-txt p{margin:2px 0 0;color:var(--ink-dim);font-size:13px}
@@ -52,6 +57,30 @@
   .sync.saving .sd{background:var(--warn)} .sync.saved .sd{background:var(--ok)} .sync.error .sd{background:var(--bad)}
   .icon-btn{width:40px;height:40px;border-radius:11px;border:1px solid var(--line);background:var(--card);color:var(--ink-dim);cursor:pointer;display:grid;place-items:center;transition:all .15s}
   .icon-btn:hover{color:var(--ink);border-color:var(--accent);background:var(--card-2)}
+
+  /* HOME GRID (boxes) */
+  .home-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  @media (max-width:620px){.home-grid{grid-template-columns:1fr}}
+  .prod-card{position:relative;text-align:right;cursor:pointer;background:linear-gradient(180deg,var(--card),var(--card-2));border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:0 24px 60px -40px #000;transition:transform .15s,border-color .15s;font-family:var(--ui)}
+  .prod-card:hover{transform:translateY(-3px);border-color:var(--accent)}
+  .prod-thumb{position:relative;height:150px;border-radius:13px;background:radial-gradient(120% 120% at 50% 0,rgba(56,189,248,.10) 0,transparent 55%),linear-gradient(160deg,#0c1a33,#0a1220);border:1px solid var(--line-soft);display:grid;place-items:center;color:var(--accent-2);overflow:hidden}
+  .prod-thumb .ov{position:absolute;inset:0;display:grid;place-items:center;background:rgba(6,12,24,.55);opacity:0;transition:opacity .15s}
+  .prod-card:hover .prod-thumb .ov{opacity:1}
+  .ov-btn{display:inline-flex;align-items:center;gap:7px;background:var(--accent-glow);border:1px solid var(--accent);color:var(--ink);font-weight:700;font-size:13px;padding:8px 16px;border-radius:999px}
+  .prod-name{font-size:18px;font-weight:800;margin:14px 0 4px}
+  .prod-stock{font-size:13px;color:var(--ink-faint);display:flex;align-items:baseline;gap:6px;direction:ltr;justify-content:flex-end}
+  .prod-stock b{font-family:var(--mono);font-size:15px;font-weight:800;color:var(--ok);font-variant-numeric:tabular-nums}
+  .prod-stock.empty b{color:var(--bad)} .prod-stock.empty{color:var(--bad-ink)}
+
+  /* MANAGE top bar */
+  .mbar{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+  .back-btn{border:1px solid var(--line);background:var(--card);color:var(--ink-dim);cursor:pointer;font-family:var(--ui);font-size:14px;font-weight:700;padding:9px 16px;border-radius:11px;display:flex;align-items:center;gap:7px;transition:all .15s}
+  .back-btn:hover{color:var(--ink);border-color:var(--accent);background:var(--card-2)}
+  .mbar-title{font-size:20px;font-weight:800}
+  .stock-pill{margin-inline-start:auto;display:inline-flex;align-items:baseline;gap:6px;direction:ltr;font-family:var(--ui);font-size:12.5px;font-weight:600;color:var(--ok-ink);background:var(--ok-bg);border:1px solid var(--ok);border-radius:999px;padding:5px 14px;white-space:nowrap}
+  .stock-pill b{font-family:var(--mono);font-size:16px;font-weight:800;color:var(--ok);font-variant-numeric:tabular-nums}
+  .stock-pill.empty{color:var(--bad-ink);background:var(--bad-bg);border-color:var(--bad)} .stock-pill.empty b{color:var(--bad)}
+
   .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
   @media (max-width:560px){.stats{grid-template-columns:1fr}}
   .stat{background:linear-gradient(180deg,var(--card),var(--card-2));border:1px solid var(--line);border-radius:15px;padding:14px 16px;display:flex;align-items:center;gap:12px}
@@ -69,10 +98,6 @@
   .card-head .ic{width:34px;height:34px;border-radius:10px;flex:none;display:grid;place-items:center;background:var(--accent-glow);border:1px solid var(--line);color:var(--accent-2)}
   .card-head h2{margin:0;font-size:15.5px;font-weight:700}
   .card-head span{margin:1px 0 0;display:block;color:var(--ink-faint);font-size:12px;font-weight:400}
-  .card-head .tag{margin-inline-start:auto;font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent-2);background:var(--accent-glow);border:1px solid var(--line);border-radius:999px;padding:4px 12px}
-  .stock-pill{margin-inline-start:auto;display:inline-flex;align-items:baseline;gap:6px;direction:ltr;font-family:var(--ui);font-size:12.5px;font-weight:600;color:var(--ok-ink);background:var(--ok-bg);border:1px solid var(--ok);border-radius:999px;padding:5px 14px;white-space:nowrap}
-  .stock-pill b{font-family:var(--mono);font-size:16px;font-weight:800;color:var(--ok);font-variant-numeric:tabular-nums}
-  .stock-pill.empty{color:var(--bad-ink);background:var(--bad-bg);border-color:var(--bad)} .stock-pill.empty b{color:var(--bad)}
   textarea{width:100%;resize:vertical;background:var(--bg-1);border:1px solid var(--line-soft);border-radius:13px;color:var(--ink);font-family:var(--mono);font-size:12.5px;line-height:1.9;padding:14px;direction:ltr;text-align:left;outline:none;transition:border-color .15s,box-shadow .15s}
   textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
   textarea::placeholder{color:var(--ink-faint)}
@@ -141,7 +166,6 @@
   .txt-in{width:100%;background:var(--bg-1);border:1px solid var(--line-soft);border-radius:11px;color:var(--ink);font-family:var(--ui);font-size:15px;padding:11px 14px;outline:none}
   .txt-in:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
   .modal-x{margin-top:20px;display:flex;gap:10px;justify-content:flex-end}
-  /* Auth */
   .auth{position:fixed;inset:0;background:radial-gradient(1000px 600px at 50% -10%,var(--glow1) 0,transparent 60%),var(--bg-0);display:grid;place-items:center;z-index:100;padding:20px}
   .auth-card{width:100%;max-width:380px;text-align:center;background:linear-gradient(180deg,var(--card),var(--card-2));border:1px solid var(--line);border-radius:22px;padding:32px 26px;box-shadow:0 40px 90px -30px #000}
   .auth-logo{width:60px;height:60px;border-radius:17px;margin:0 auto 16px;display:grid;place-items:center;background:linear-gradient(150deg,#0ea5e9,#22d3ee);color:#04121f;font-weight:800;font-family:var(--mono);font-size:22px}
@@ -159,7 +183,7 @@
 </head>
 <body>
 
-<!-- AUTH SCREEN -->
+<!-- AUTH -->
 <div class="auth" id="authScreen">
   <div class="auth-card">
     <div class="auth-logo">S7L</div>
@@ -177,10 +201,7 @@
 <div class="wrap" id="app" hidden>
   <header>
     <div class="logo">S7L</div>
-    <div class="h-txt">
-      <h1>موزّع المخزون</h1>
-      <p>أضف · ابحث · اسحب — محفوظ في السحابة</p>
-    </div>
+    <div class="h-txt"><h1>موزّع المخزون</h1><p>مخزونين منفصلين — محفوظ في السحابة</p></div>
     <div class="h-tools">
       <div class="sync" id="sync"><span class="sd"></span><span id="syncTxt">—</span></div>
       <button class="icon-btn" id="themeBtn" title="ليل / نهار"><svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
@@ -189,61 +210,75 @@
     </div>
   </header>
 
-  <div class="stats">
-    <div class="stat"><div class="si"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8V21H3V8"/><rect x="1" y="3" width="22" height="5" rx="1"/></svg></div><div><div class="sv" id="stRemain">0</div><div class="sl">المتبقي في المخزون</div></div></div>
-    <div class="stat"><div class="si"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2 15 22l-4-9-9-4 20-7z"/></svg></div><div><div class="sv" id="stToday">0</div><div class="sl">المسحوب اليوم</div></div></div>
-    <div class="stat"><div class="si"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></div><div><div class="sv" id="stTotal">0</div><div class="sl">إجمالي المسحوب</div></div></div>
+  <!-- HOME: the boxes -->
+  <div id="homeView">
+    <div class="home-grid" id="homeGrid"></div>
   </div>
 
-  <div class="banner" id="lowBanner"></div>
-
-  <div class="grid">
-    <div class="col">
-      <section class="card" id="addCard">
-        <div class="card-head"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div><div><h2>إضافة للمخزون</h2><span>الصق الحسابات أو اسحب ملف .txt وأفلته هنا</span></div></div>
-        <textarea id="addBox" spellcheck="false" placeholder="email@example.com:password:TOKEN:EXTRA
-أو التوكن الخام مباشرة...
-سطر لكل حساب"></textarea>
-        <div class="row">
-          <button class="btn-primary grow" id="addBtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>أضف للمخزون</button>
-          <button class="btn-soft" id="importBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>استيراد ملف</button>
-          <input type="file" id="fileIn" accept=".txt,text/plain">
-        </div>
-      </section>
-
-      <section class="card">
-        <div class="card-head"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8V21H3V8"/><rect x="1" y="3" width="22" height="5" rx="1"/><path d="M10 12h4"/></svg></div><div><h2>مخزونك</h2><span>كل حساباتك — تقدر تعدّل هنا مباشرة</span></div><span class="stock-pill" id="stockTag"><b id="stockNum">0</b> In Stock</span></div>
-        <div class="search-wrap"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input id="search" type="text" placeholder="ابحث في المخزون (إيميل / توكن)..."></div>
-        <div id="searchRes"></div>
-        <textarea id="stock" spellcheck="false" placeholder="ما فيه حسابات بعد — أضف من الأعلى ⬆"></textarea>
-        <div class="row">
-          <button class="btn-soft grow" id="exportBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5-5 5 5M12 5v12"/></svg>تصدير ملف</button>
-          <button class="btn-soft" id="dedupeBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>تنظيف</button>
-          <button class="btn-soft" id="clearBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg><span class="lab">مسح الكل</span></button>
-        </div>
-      </section>
+  <!-- MANAGE: inside a box -->
+  <div id="manageView" hidden>
+    <div class="mbar">
+      <button class="back-btn" id="backBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>رجوع</button>
+      <div class="mbar-title" id="mTitle">BOOST 1M</div>
+      <span class="stock-pill" id="mPill"><b id="mStockNum">0</b> In Stock</span>
     </div>
 
-    <div class="col">
-      <section class="card">
-        <div class="card-head"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2 15 22l-4-9-9-4 20-7z"/></svg></div><div><h2>السحب</h2><span>حدّد الكمية والنوع ثم أرسل</span></div></div>
-        <div class="fld"><div class="lbl">الكمية <span class="hint">كم حساب تبي؟</span></div><div class="qty-wrap"><button class="qty-btn" id="minus">−</button><input type="number" id="qty" value="1" min="1" step="1" inputmode="numeric"><button class="qty-btn" id="plus">+</button></div></div>
-        <div class="fld"><div class="lbl">نوع الإرسال</div><div class="seg" id="mode"><button data-mode="full" class="on">الحساب كامل<span class="sub">email:pass:token</span></button><button data-mode="token">التوكن فقط<span class="sub">token only</span></button></div></div>
-        <div class="fld"><label class="chk"><input type="checkbox" id="consume" checked><span class="box"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#04121f" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>حذف المسحوب من المخزون</label></div>
-        <button class="send" id="sendBtn">إرسال</button>
-        <div class="msg" id="msg"></div>
-      </section>
+    <div class="stats">
+      <div class="stat"><div class="si"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8V21H3V8"/><rect x="1" y="3" width="22" height="5" rx="1"/></svg></div><div><div class="sv" id="stRemain">0</div><div class="sl">المتبقي في المخزون</div></div></div>
+      <div class="stat"><div class="si"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2 15 22l-4-9-9-4 20-7z"/></svg></div><div><div class="sv" id="stToday">0</div><div class="sl">المسحوب اليوم</div></div></div>
+      <div class="stat"><div class="si"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></div><div><div class="sv" id="stTotal">0</div><div class="sl">إجمالي المسحوب</div></div></div>
+    </div>
 
-      <section class="card">
-        <div class="card-head"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div><div><h2>الناتج</h2><span>المسحوب جاهز للنسخ</span></div><div class="out-actions"><button class="btn-soft" id="copyBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="lab">نسخ</span></button></div></div>
-        <textarea id="output" readonly placeholder="النتيجة بتظهر هنا بعد ما تضغط إرسال..."></textarea>
-        <div class="out-meta"><span id="outMeta">—</span><span>S7L Stock</span></div>
-      </section>
+    <div class="banner" id="lowBanner"></div>
 
-      <section class="card">
-        <div class="card-head"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg></div><div><h2>سجل السحب</h2><span>آخر عمليات السحب</span></div><button class="btn-soft" id="clearHistBtn" style="margin-inline-start:auto;padding:7px 12px">مسح السجل</button></div>
-        <div id="histList"></div>
-      </section>
+    <div class="grid">
+      <div class="col">
+        <section class="card" id="addCard">
+          <div class="card-head"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div><div><h2>إضافة للمخزون</h2><span>الصق الحسابات أو اسحب ملف .txt وأفلته هنا</span></div></div>
+          <textarea id="addBox" spellcheck="false" placeholder="email@example.com:password:TOKEN:EXTRA
+أو التوكن الخام مباشرة...
+سطر لكل حساب"></textarea>
+          <div class="row">
+            <button class="btn-primary grow" id="addBtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>أضف للمخزون</button>
+            <button class="btn-soft" id="importBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>استيراد ملف</button>
+            <input type="file" id="fileIn" accept=".txt,text/plain">
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-head"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8V21H3V8"/><rect x="1" y="3" width="22" height="5" rx="1"/><path d="M10 12h4"/></svg></div><div><h2>مخزونك</h2><span>حسابات هذا المربع — تقدر تعدّل مباشرة</span></div></div>
+          <div class="search-wrap"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input id="search" type="text" placeholder="ابحث في المخزون (إيميل / توكن)..."></div>
+          <div id="searchRes"></div>
+          <textarea id="stock" spellcheck="false" placeholder="ما فيه حسابات بعد — أضف من الأعلى ⬆"></textarea>
+          <div class="row">
+            <button class="btn-soft grow" id="exportBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5-5 5 5M12 5v12"/></svg>تصدير ملف</button>
+            <button class="btn-soft" id="dedupeBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>تنظيف</button>
+            <button class="btn-soft" id="clearBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg><span class="lab">مسح الكل</span></button>
+          </div>
+        </section>
+      </div>
+
+      <div class="col">
+        <section class="card">
+          <div class="card-head"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2 15 22l-4-9-9-4 20-7z"/></svg></div><div><h2>السحب</h2><span>حدّد الكمية والنوع ثم أرسل</span></div></div>
+          <div class="fld"><div class="lbl">الكمية <span class="hint">كم حساب تبي؟</span></div><div class="qty-wrap"><button class="qty-btn" id="minus">−</button><input type="number" id="qty" value="1" min="1" step="1" inputmode="numeric"><button class="qty-btn" id="plus">+</button></div></div>
+          <div class="fld"><div class="lbl">نوع الإرسال</div><div class="seg" id="mode"><button data-mode="full" class="on">الحساب كامل<span class="sub">email:pass:token</span></button><button data-mode="token">التوكن فقط<span class="sub">token only</span></button></div></div>
+          <div class="fld"><label class="chk"><input type="checkbox" id="consume" checked><span class="box"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#04121f" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>حذف المسحوب من المخزون</label></div>
+          <button class="send" id="sendBtn">إرسال</button>
+          <div class="msg" id="msg"></div>
+        </section>
+
+        <section class="card">
+          <div class="card-head"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div><div><h2>الناتج</h2><span>المسحوب جاهز للنسخ</span></div><div class="out-actions"><button class="btn-soft" id="copyBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="lab">نسخ</span></button></div></div>
+          <textarea id="output" readonly placeholder="النتيجة بتظهر هنا بعد ما تضغط إرسال..."></textarea>
+          <div class="out-meta"><span id="outMeta">—</span><span>S7L Stock</span></div>
+        </section>
+
+        <section class="card">
+          <div class="card-head"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg></div><div><h2>سجل السحب</h2><span>آخر عمليات هذا المربع</span></div><button class="btn-soft" id="clearHistBtn" style="margin-inline-start:auto;padding:7px 12px">مسح السجل</button></div>
+          <div id="histList"></div>
+        </section>
+      </div>
     </div>
   </div>
 
@@ -258,37 +293,33 @@
     <div class="m-sec" style="border-top:0;padding-top:0;margin-top:0">
       <div class="m-lbl">حد التنبيه للمخزون المنخفض</div>
       <input class="txt-in" type="number" id="lowInput" min="0" step="1" placeholder="مثلاً 5">
-      <p class="mp" style="margin:8px 0 0;font-size:12px">لما ينزل المخزون عن هذا الرقم يطلع تحذير. اكتب 0 للإيقاف.</p>
+      <p class="mp" style="margin:8px 0 0;font-size:12px">لما ينزل أي مربع عن هذا الرقم يطلع تحذير. اكتب 0 للإيقاف.</p>
     </div>
     <div class="modal-x"><button class="btn-primary" id="closeSettings" style="padding:11px 22px">تم</button></div>
   </div>
 </div>
 
 <script>
-  /* ====== إعدادات Supabase — عدّل القيمتين فقط ======
-     من: Supabase → Project Settings → API
-     SUPA_URL      = Project URL
-     SUPA_ANON_KEY = مفتاح anon public                */
-   var SUPA_URL = "https://ssxcigalyvguxbkgmfre.supabase.co";
-   var SUPA_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzeGNpZ2FseXZndXhia2dtZnJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyODk4MDYsImV4cCI6MjEwNDg2NTgwNn0.C9Ioflo45PhalrTatYSHzbPooZ133T5jBW-nfZ07NGo";
-  /* ================================================= */
-</script>
-<script>
 (function(){
   "use strict";
   var $=function(s){return document.querySelector(s);};
-  var sb=null, user=null, mode="full", clearArmed=false, persistTimer=null, booted=false;
-  var settings={low:5, theme:"dark"};
+  var sb=null, user=null, mode="full", clearArmed=false, persistTimer=null, booted=false, currentCat=null;
+
+  // categories (المربعات) — أضف/عدّل هنا لو تبي مربعات أكثر
+  var CATS=[{key:"1m",name:"BOOST 1M"},{key:"3m",name:"BOOST 3M"}];
+  function blankCats(){ var o={}; CATS.forEach(function(c){o[c.key]={stock:"",history:[]};}); return o; }
+  var state={ cats:blankCats(), settings:{low:5,theme:"dark"} };
+  function normalizeCats(src){ var o=blankCats(); CATS.forEach(function(c){ if(src&&src[c.key]){ o[c.key].stock=src[c.key].stock||""; o[c.key].history=Array.isArray(src[c.key].history)?src[c.key].history:[]; } }); return o; }
 
   // ---------- AUTH ----------
   var authMode="login";
   function showAuthErr(m){ $("#authErr").textContent=m||""; }
   function setAuthMode(m){
     authMode=m;
-    $("#authTitle").textContent = m==="login"?"تسجيل الدخول":"إنشاء حساب";
-    $("#authSub").textContent = m==="login"?"ادخل عشان توصل لمخزونك المحفوظ":"سجّل عشان نحفظ مخزونك في السحابة";
-    $("#authBtn").textContent = m==="login"?"دخول":"إنشاء الحساب";
-    $("#authSwitch").innerHTML = m==="login"?'ما عندك حساب؟ <a id="authToggle">أنشئ حساب</a>':'عندك حساب؟ <a id="authToggle">سجّل دخول</a>';
+    $("#authTitle").textContent=m==="login"?"تسجيل الدخول":"إنشاء حساب";
+    $("#authSub").textContent=m==="login"?"ادخل عشان توصل لمخزونك المحفوظ":"سجّل عشان نحفظ مخزونك في السحابة";
+    $("#authBtn").textContent=m==="login"?"دخول":"إنشاء الحساب";
+    $("#authSwitch").innerHTML=m==="login"?'ما عندك حساب؟ <a id="authToggle">أنشئ حساب</a>':'عندك حساب؟ <a id="authToggle">سجّل دخول</a>';
     $("#authToggle").addEventListener("click",function(){ setAuthMode(m==="login"?"signup":"login"); showAuthErr(""); });
   }
   async function doAuth(){
@@ -297,72 +328,64 @@
     if(!email||!pass){ showAuthErr("اكتب الإيميل وكلمة المرور."); return; }
     $("#authBtn").disabled=true;
     try{
-      var res;
-      if(authMode==="login") res=await sb.auth.signInWithPassword({email:email,password:pass});
-      else res=await sb.auth.signUp({email:email,password:pass});
+      var res=authMode==="login"?await sb.auth.signInWithPassword({email:email,password:pass}):await sb.auth.signUp({email:email,password:pass});
       if(res.error){ showAuthErr(mapErr(res.error.message)); $("#authBtn").disabled=false; return; }
-      if(authMode==="signup" && !res.data.session){ showAuthErr("تم إنشاء الحساب ✔ راجع إيميلك للتأكيد ثم سجّل دخول."); setAuthMode("login"); $("#authBtn").disabled=false; return; }
+      if(authMode==="signup" && !res.data.session){ showAuthErr("تم إنشاء الحساب ✔ راجع إيميلك للتأكيد ثم سجّل دخول."); setAuthMode("login"); $("#authBtn").disabled=false; }
     }catch(e){ showAuthErr("صار خطأ في الاتصال."); $("#authBtn").disabled=false; }
   }
-  function mapErr(m){
-    m=(m||"").toLowerCase();
+  function mapErr(m){ m=(m||"").toLowerCase();
     if(m.indexOf("invalid login")>=0) return "الإيميل أو كلمة المرور غير صحيحة.";
     if(m.indexOf("already registered")>=0) return "هذا الإيميل مسجّل مسبقاً — سجّل دخول.";
     if(m.indexOf("password")>=0) return "كلمة المرور قصيرة (6 أحرف على الأقل).";
-    return m;
-  }
+    return m; }
 
-  // ---------- CLOUD SYNC (blob model) ----------
-  function setSync(state,txt){ $("#sync").className="sync "+state; $("#syncTxt").textContent=txt; }
+  // ---------- SYNC ----------
+  function setSync(s,t){ $("#sync").className="sync "+s; $("#syncTxt").textContent=t; }
   async function remoteLoad(){
     try{
-      var r=await sb.from("user_data").select("stock,history,settings").eq("user_id",user.id).maybeSingle();
+      var r=await sb.from("user_data").select("*").eq("user_id",user.id).maybeSingle();
       if(r.error) throw r.error;
       if(r.data){
-        $("#stock").value=r.data.stock||"";
-        localStorage.setItem("s7l_hist", JSON.stringify(r.data.history||[]));
-        settings=Object.assign({low:5,theme:"dark"}, r.data.settings||{});
-      } else {
-        // first login on this account: seed empty row from any local cache
-        settings=Object.assign({low:5,theme:"dark"}, readLocalSettings());
-      }
-      localStorage.setItem("s7l_settings_v1", JSON.stringify(settings));
+        var d=r.data.data||{};
+        if(d.cats){ state.cats=normalizeCats(d.cats); }
+        else if(r.data.stock){ state.cats=blankCats(); state.cats[CATS[0].key].stock=r.data.stock||""; state.cats[CATS[0].key].history=Array.isArray(r.data.history)?r.data.history:[]; }
+        else { state.cats=blankCats(); }
+        state.settings=Object.assign({low:5,theme:"dark"}, d.settings||r.data.settings||{});
+      } else { state.cats=blankCats(); }
+      try{localStorage.setItem("s7l_theme",JSON.stringify({theme:state.settings.theme}));}catch(e){}
     }catch(e){ setSync("error","تعذّر التحميل"); }
   }
-  function schedulePersist(){
-    if(!user) return;
-    setSync("saving","يحفظ...");
-    clearTimeout(persistTimer);
-    persistTimer=setTimeout(persistNow,700);
-  }
+  function schedulePersist(){ if(!user) return; setSync("saving","يحفظ..."); clearTimeout(persistTimer); persistTimer=setTimeout(persistNow,700); }
   async function persistNow(){
     if(!user) return;
     try{
-      var r=await sb.from("user_data").upsert({
-        user_id:user.id, stock:$("#stock").value, history:getHist(), settings:settings, updated_at:new Date().toISOString()
-      },{onConflict:"user_id"});
-      if(r.error) throw r.error;
-      setSync("saved","محفوظ ✔");
+      var r=await sb.from("user_data").upsert({ user_id:user.id, data:{cats:state.cats,settings:state.settings}, updated_at:new Date().toISOString() },{onConflict:"user_id"});
+      if(r.error) throw r.error; setSync("saved","محفوظ ✔");
     }catch(e){ setSync("error","لم يُحفظ"); }
   }
-  function readLocalSettings(){ try{return JSON.parse(localStorage.getItem("s7l_settings_v1")||"{}");}catch(e){return {};} }
 
-  // history stored locally + mirrored to DB via persist
-  function getHist(){ try{return JSON.parse(localStorage.getItem("s7l_hist")||"[]");}catch(e){return [];} }
-  function setHist(a){ try{localStorage.setItem("s7l_hist",JSON.stringify(a));}catch(e){} schedulePersist(); }
-
-  // ---------- APP ----------
-  var stockEl,addBox,qtyEl,outEl,msgEl,tagEl,outMeta,searchEl,searchRes,histList,lowBanner;
+  // ---------- current category accessors ----------
+  function cur(){ return state.cats[currentCat]; }
+  var stockEl,addBox,qtyEl,outEl,msgEl,outMeta,searchEl,searchRes,histList,lowBanner;
   function lines(){ return stockEl.value.split(/\r?\n/).map(function(l){return l.trim();}).filter(Boolean); }
-  function saveStock(){ schedulePersist(); }
-  function refresh(){ var n=lines().length; $("#stockNum").textContent=n; tagEl.classList.toggle("empty",n===0); updateStats(); updateLow(); if(searchEl.value.trim()) doSearch(); }
+  function commitStock(){ cur().stock=stockEl.value; schedulePersist(); }
+  function getHist(){ return cur().history||[]; }
+  function setHist(a){ cur().history=a; schedulePersist(); }
+
+  function refresh(){
+    var n=lines().length;
+    $("#mStockNum").textContent=n; $("#mPill").classList.toggle("empty",n===0);
+    updateStats(); updateLow();
+    if(searchEl.value.trim()) doSearch();
+    renderHomeCards();
+  }
   function updateStats(){
     var hist=getHist(), today=new Date().toDateString(), t=0, all=0;
     hist.forEach(function(h){ all+=h.n; if(new Date(h.t).toDateString()===today) t+=h.n; });
     $("#stRemain").textContent=lines().length; $("#stToday").textContent=t; $("#stTotal").textContent=all;
   }
   function updateLow(){
-    var n=lines().length, low=parseInt(settings.low,10)||0;
+    var n=lines().length, low=parseInt(state.settings.low,10)||0;
     if(low>0&&n>0&&n<=low){ lowBanner.className="banner show"; lowBanner.innerHTML='⚠️ المخزون قارب يخلص — باقي <span class="em">'+n+'</span> فقط (حد التنبيه '+low+').'; }
     else if(n===0){ lowBanner.className="banner show"; lowBanner.innerHTML='🚫 المخزون <span class="em">مخلّص</span> — ما فيه حسابات.'; }
     else lowBanner.className="banner";
@@ -371,20 +394,46 @@
   function extractToken(line){ var p=line.split(":"),i; for(i=0;i<p.length;i++){if(TOK.test(p[i]))return p[i];} var m=line.match(TOK_LOOSE); return m?m[0]:line; }
   function showMsg(t,h){ msgEl.className="msg show "+t; msgEl.innerHTML=h; }
 
+  function catLines(key){ return (state.cats[key].stock||"").split(/\r?\n/).map(function(l){return l.trim();}).filter(Boolean); }
+
+  // ---------- HOME cards ----------
+  function renderHomeCards(){
+    var g=$("#homeGrid");
+    g.innerHTML=CATS.map(function(c){
+      var n=catLines(c.key).length, empty=n===0?" empty":"";
+      return '<button class="prod-card" data-cat="'+c.key+'">'+
+        '<div class="prod-thumb"><svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></svg>'+
+        '<div class="ov"><span class="ov-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg> فتح وإدارة</span></div></div>'+
+        '<div class="prod-name">'+c.name+'</div>'+
+        '<div class="prod-stock'+empty+'"><b>'+n+'</b> In Stock</div>'+
+      '</button>';
+    }).join("");
+  }
+  function openCat(key){
+    currentCat=key;
+    var c=CATS.filter(function(x){return x.key===key;})[0];
+    $("#mTitle").textContent=c?c.name:"";
+    stockEl.value=cur().stock||"";
+    searchEl.value=""; searchRes.className=""; searchRes.innerHTML="";
+    outEl.value=""; outMeta.textContent="—"; msgEl.className="msg"; addBox.value="";
+    $("#homeView").hidden=true; $("#manageView").hidden=false;
+    renderHist(); refresh(); window.scrollTo(0,0);
+  }
+  function goHome(){ currentCat=null; $("#manageView").hidden=true; $("#homeView").hidden=false; renderHomeCards(); window.scrollTo(0,0); }
+
+  // ---------- actions ----------
   function addLines(incoming,src){
     incoming=incoming.map(function(l){return l.trim();}).filter(Boolean);
     if(!incoming.length){ showMsg("warn",'⚠️ ما فيه شي للإضافة.'); return; }
-    var cur=lines(), seen={}; cur.forEach(function(l){seen[l]=1;});
-    var added=0,dup=0;
-    incoming.forEach(function(l){ if(seen[l])dup++; else {seen[l]=1;cur.push(l);added++;} });
-    stockEl.value=cur.join("\n"); saveStock(); refresh();
-    var total=cur.length, from=src?(' من '+src):'';
+    var c=lines(), seen={}; c.forEach(function(l){seen[l]=1;}); var added=0,dup=0;
+    incoming.forEach(function(l){ if(seen[l])dup++; else {seen[l]=1;c.push(l);added++;} });
+    stockEl.value=c.join("\n"); commitStock(); refresh();
+    var total=c.length, from=src?(' من '+src):'';
     if(!added) showMsg("warn",'ℹ️ كل الحسابات موجودة مسبقاً — تجاهلت <span class="em">'+dup+'</span> مكرر.');
     else if(dup) showMsg("ok",'✅ أضفت <span class="em">'+added+'</span>'+from+' (تجاهلت <span class="em">'+dup+'</span> مكرر) — المخزون الآن <span class="em">'+total+'</span>.');
     else showMsg("ok",'✅ أضفت <span class="em">'+added+'</span> حساب'+from+' — المخزون الآن <span class="em">'+total+'</span>.');
   }
   function addFromBox(){ if(!addBox.value.trim()){showMsg("warn",'⚠️ خانة الإضافة فاضية.');return;} addLines(addBox.value.split(/\r?\n/)); addBox.value=""; }
-
   function send(){
     var stock=lines(), have=stock.length, want=parseInt(qtyEl.value,10); if(!want||want<1)want=1;
     if(!have){ outEl.value=""; outMeta.textContent="—"; showMsg("bad",'🚫 المخزون <span class="em">مخلّص</span> — ما فيه حسابات.'); return; }
@@ -392,10 +441,9 @@
     var out=picked.map(function(l){return mode==="token"?extractToken(l):l;});
     outEl.value=out.join("\n"); var noun=mode==="token"?"توكن":"حساب";
     if($("#consume").checked){
-      var rest=stock.slice(take); stockEl.value=rest.join("\n"); saveStock();
+      var rest=stock.slice(take); stockEl.value=rest.join("\n"); commitStock();
       var hist=getHist(); hist.unshift({t:Date.now(),n:take,mode:mode}); if(hist.length>300)hist=hist.slice(0,300); setHist(hist);
-      renderHist(); refresh();
-      var left=rest.length;
+      renderHist(); refresh(); var left=rest.length;
       if(take<want) showMsg("warn",'⚠️ طلبت <span class="em">'+want+'</span> بس المتبقي <span class="em">'+take+'</span> فقط — أرسلت لك '+take+' و<span class="em">خلص المخزون</span>.');
       else if(!left) showMsg("ok",'✅ أرسلت <span class="em">'+take+'</span> '+noun+' — و<span class="em">خلص المخزون</span> الآن.');
       else showMsg("ok",'✅ أرسلت <span class="em">'+take+'</span> '+noun+' — باقي <span class="em">'+left+'</span> في المخزون.');
@@ -427,30 +475,33 @@
     searchRes.className="show";
   }
   function applyTheme(){
-    document.documentElement.setAttribute("data-theme", settings.theme==="light"?"light":"dark");
-    $("#themeIcon").innerHTML = settings.theme==="light"
-      ? '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/>'
-      : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    document.documentElement.setAttribute("data-theme", state.settings.theme==="light"?"light":"dark");
+    $("#themeIcon").innerHTML=state.settings.theme==="light"
+      ?'<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/>'
+      :'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    try{localStorage.setItem("s7l_theme",JSON.stringify({theme:state.settings.theme}));}catch(e){}
   }
-  function download(name,text){ var b=new Blob([text],{type:"text/plain;charset=utf-8"}); var u=URL.createObjectURL(b); var a=document.createElement("a"); a.href=u; a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){URL.revokeObjectURL(u);},1000); }
+  function download(name,text){ var b=new Blob([text],{type:"text/plain;charset=utf-8"}),u=URL.createObjectURL(b),a=document.createElement("a"); a.href=u; a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){URL.revokeObjectURL(u);},1000); }
 
   function bindApp(){
     stockEl=$("#stock");addBox=$("#addBox");qtyEl=$("#qty");outEl=$("#output");msgEl=$("#msg");
-    tagEl=$("#stockTag");outMeta=$("#outMeta");searchEl=$("#search");searchRes=$("#searchRes");histList=$("#histList");lowBanner=$("#lowBanner");
+    outMeta=$("#outMeta");searchEl=$("#search");searchRes=$("#searchRes");histList=$("#histList");lowBanner=$("#lowBanner");
+    $("#homeGrid").addEventListener("click",function(e){ var b=e.target.closest("[data-cat]"); if(b) openCat(b.getAttribute("data-cat")); });
+    $("#backBtn").addEventListener("click",goHome);
     $("#addBtn").addEventListener("click",addFromBox);
     addBox.addEventListener("keydown",function(e){if((e.ctrlKey||e.metaKey)&&e.key==="Enter"){e.preventDefault();addFromBox();}});
     $("#sendBtn").addEventListener("click",send);
     $("#plus").addEventListener("click",function(){qtyEl.value=(parseInt(qtyEl.value,10)||0)+1;});
     $("#minus").addEventListener("click",function(){qtyEl.value=Math.max(1,(parseInt(qtyEl.value,10)||1)-1);});
     $("#mode").addEventListener("click",function(e){var b=e.target.closest("button[data-mode]");if(!b)return;mode=b.getAttribute("data-mode");Array.prototype.forEach.call(this.children,function(c){c.classList.toggle("on",c===b);});});
-    stockEl.addEventListener("input",function(){saveStock();refresh();});
+    stockEl.addEventListener("input",function(){commitStock();refresh();});
     searchEl.addEventListener("input",doSearch);
-    $("#dedupeBtn").addEventListener("click",function(){var seen={},u=[];lines().forEach(function(l){if(!seen[l]){seen[l]=1;u.push(l);}});stockEl.value=u.join("\n");saveStock();refresh();showMsg("ok",'🧹 تم التنظيف — المخزون الآن <span class="em">'+u.length+'</span> حساب فريد.');});
+    $("#dedupeBtn").addEventListener("click",function(){var seen={},u=[];lines().forEach(function(l){if(!seen[l]){seen[l]=1;u.push(l);}});stockEl.value=u.join("\n");commitStock();refresh();showMsg("ok",'🧹 تم التنظيف — المخزون الآن <span class="em">'+u.length+'</span> حساب فريد.');});
     var cb=$("#clearBtn"),cl=cb.querySelector(".lab");
-    cb.addEventListener("click",function(){if(!clearArmed){clearArmed=true;cb.classList.add("warned");cl.textContent="متأكد؟ اضغط ثانية";setTimeout(function(){clearArmed=false;cb.classList.remove("warned");cl.textContent="مسح الكل";},2500);return;}stockEl.value="";clearArmed=false;cb.classList.remove("warned");cl.textContent="مسح الكل";saveStock();refresh();showMsg("bad",'🗑️ تم مسح المخزون بالكامل.');});
+    cb.addEventListener("click",function(){if(!clearArmed){clearArmed=true;cb.classList.add("warned");cl.textContent="متأكد؟ اضغط ثانية";setTimeout(function(){clearArmed=false;cb.classList.remove("warned");cl.textContent="مسح الكل";},2500);return;}stockEl.value="";clearArmed=false;cb.classList.remove("warned");cl.textContent="مسح الكل";commitStock();refresh();showMsg("bad",'🗑️ تم مسح مخزون هذا المربع.');});
     var cpb=$("#copyBtn"),cpl=cpb.querySelector(".lab");
     cpb.addEventListener("click",function(){if(!outEl.value)return;var d=function(){cpb.classList.add("copied");cpl.textContent="تم النسخ ✓";setTimeout(function(){cpb.classList.remove("copied");cpl.textContent="نسخ";},1600);};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(outEl.value).then(d,function(){outEl.select();document.execCommand("copy");d();});else{outEl.select();document.execCommand("copy");d();}});
-    $("#exportBtn").addEventListener("click",function(){var data=lines().join("\n");if(!data){showMsg("warn",'⚠️ المخزون فاضي — ما فيه شي للتصدير.');return;}download("s7l-stock-"+new Date().toISOString().slice(0,10)+".txt",data);showMsg("ok",'✅ تم تنزيل نسخة من مخزونك ('+lines().length+' حساب).');});
+    $("#exportBtn").addEventListener("click",function(){var data=lines().join("\n");if(!data){showMsg("warn",'⚠️ المخزون فاضي — ما فيه شي للتصدير.');return;}var c=CATS.filter(function(x){return x.key===currentCat;})[0];download("s7l-"+(c?c.name.replace(/\s+/g,"-"):"stock")+"-"+new Date().toISOString().slice(0,10)+".txt",data);showMsg("ok",'✅ تم تنزيل نسخة ('+lines().length+' حساب).');});
     $("#importBtn").addEventListener("click",function(){$("#fileIn").click();});
     $("#fileIn").addEventListener("change",function(e){var f=e.target.files&&e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){addLines(String(r.result).split(/\r?\n/),f.name);};r.readAsText(f);e.target.value="";});
     var ac=$("#addCard");
@@ -458,32 +509,25 @@
     ["dragleave","drop"].forEach(function(ev){ac.addEventListener(ev,function(e){e.preventDefault();if(ev==="dragleave"&&ac.contains(e.relatedTarget))return;ac.classList.remove("drop");});});
     ac.addEventListener("drop",function(e){var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(f){var r=new FileReader();r.onload=function(){addLines(String(r.result).split(/\r?\n/),f.name);};r.readAsText(f);}});
     $("#clearHistBtn").addEventListener("click",function(){setHist([]);renderHist();updateStats();});
-    $("#themeBtn").addEventListener("click",function(){settings.theme=settings.theme==="light"?"dark":"light";applyTheme();schedulePersist();});
-    $("#settingsBtn").addEventListener("click",function(){$("#lowInput").value=settings.low;$("#acctLine").textContent="مسجّل دخول: "+(user?user.email:"");$("#settingsBack").className="back show";});
+    $("#themeBtn").addEventListener("click",function(){state.settings.theme=state.settings.theme==="light"?"dark":"light";applyTheme();schedulePersist();});
+    $("#settingsBtn").addEventListener("click",function(){$("#lowInput").value=state.settings.low;$("#acctLine").textContent="مسجّل دخول: "+(user?user.email:"");$("#settingsBack").className="back show";});
     $("#closeSettings").addEventListener("click",function(){$("#settingsBack").className="back";});
     $("#settingsBack").addEventListener("click",function(e){if(e.target===this)this.className="back";});
-    $("#lowInput").addEventListener("input",function(){settings.low=Math.max(0,parseInt(this.value,10)||0);updateLow();schedulePersist();});
+    $("#lowInput").addEventListener("input",function(){state.settings.low=Math.max(0,parseInt(this.value,10)||0);updateLow();renderHomeCards();schedulePersist();});
     $("#logoutBtn").addEventListener("click",async function(){ await sb.auth.signOut(); location.reload(); });
   }
 
   function startApp(){
     $("#authScreen").hidden=true; $("#app").hidden=false;
     if(!booted){ bindApp(); booted=true; }
-    applyTheme(); renderHist(); refresh(); setSync("saved","محفوظ ✔");
+    applyTheme(); goHome(); setSync("saved","محفوظ ✔");
   }
   function showLogin(){ $("#app").hidden=true; $("#authScreen").hidden=false; }
+  async function onSession(session){ if(session){ user=session.user; await remoteLoad(); startApp(); } else { user=null; showLogin(); } }
 
-  async function onSession(session){
-    if(session){ user=session.user; await remoteLoad(); startApp(); }
-    else { user=null; showLogin(); }
-  }
-
-  // ---------- BOOT ----------
   function boot(){
-    if(typeof SUPA_URL==="undefined" || /YOUR-/.test(SUPA_URL)){
-      showLogin(); showAuthErr("لم يتم ضبط إعدادات Supabase بعد (config.js)."); $("#authBtn").disabled=true; return;
-    }
-    sb=window.supabase.createClient(SUPA_URL, SUPA_ANON_KEY);
+    if(typeof SUPA_URL==="undefined" || /YOUR-/.test(SUPA_URL)){ showLogin(); showAuthErr("لم يتم ضبط إعدادات Supabase بعد (فوق في index.html)."); $("#authBtn").disabled=true; return; }
+    sb=window.supabase.createClient(SUPA_URL,SUPA_ANON_KEY);
     setAuthMode("login");
     $("#authBtn").addEventListener("click",doAuth);
     $("#authPass").addEventListener("keydown",function(e){if(e.key==="Enter")doAuth();});
