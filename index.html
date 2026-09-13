@@ -70,6 +70,9 @@
   .card-head h2{margin:0;font-size:15.5px;font-weight:700}
   .card-head span{margin:1px 0 0;display:block;color:var(--ink-faint);font-size:12px;font-weight:400}
   .card-head .tag{margin-inline-start:auto;font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent-2);background:var(--accent-glow);border:1px solid var(--line);border-radius:999px;padding:4px 12px}
+  .stock-pill{margin-inline-start:auto;display:inline-flex;align-items:baseline;gap:6px;direction:ltr;font-family:var(--ui);font-size:12.5px;font-weight:600;color:var(--ok-ink);background:var(--ok-bg);border:1px solid var(--ok);border-radius:999px;padding:5px 14px;white-space:nowrap}
+  .stock-pill b{font-family:var(--mono);font-size:16px;font-weight:800;color:var(--ok);font-variant-numeric:tabular-nums}
+  .stock-pill.empty{color:var(--bad-ink);background:var(--bad-bg);border-color:var(--bad)} .stock-pill.empty b{color:var(--bad)}
   textarea{width:100%;resize:vertical;background:var(--bg-1);border:1px solid var(--line-soft);border-radius:13px;color:var(--ink);font-family:var(--mono);font-size:12.5px;line-height:1.9;padding:14px;direction:ltr;text-align:left;outline:none;transition:border-color .15s,box-shadow .15s}
   textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
   textarea::placeholder{color:var(--ink-faint)}
@@ -209,7 +212,7 @@
       </section>
 
       <section class="card">
-        <div class="card-head"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8V21H3V8"/><rect x="1" y="3" width="22" height="5" rx="1"/><path d="M10 12h4"/></svg></div><div><h2>مخزونك</h2><span>كل حساباتك — تقدر تعدّل هنا مباشرة</span></div><span class="tag" id="stockTag">0</span></div>
+        <div class="card-head"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8V21H3V8"/><rect x="1" y="3" width="22" height="5" rx="1"/><path d="M10 12h4"/></svg></div><div><h2>مخزونك</h2><span>كل حساباتك — تقدر تعدّل هنا مباشرة</span></div><span class="stock-pill" id="stockTag"><b id="stockNum">0</b> In Stock</span></div>
         <div class="search-wrap"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input id="search" type="text" placeholder="ابحث في المخزون (إيميل / توكن)..."></div>
         <div id="searchRes"></div>
         <textarea id="stock" spellcheck="false" placeholder="ما فيه حسابات بعد — أضف من الأعلى ⬆"></textarea>
@@ -266,8 +269,8 @@
      من: Supabase → Project Settings → API
      SUPA_URL      = Project URL
      SUPA_ANON_KEY = مفتاح anon public                */
-  var SUPA_URL = "https://ssxcigalyvguxbkgmfre.supabase.co";
-  var SUPA_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzeGNpZ2FseXZndXhia2dtZnJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyODk4MDYsImV4cCI6MjEwNDg2NTgwNn0.C9Ioflo45PhalrTatYSHzbPooZ133T5jBW-nfZ07NGo";
+   var SUPA_URL = "https://ssxcigalyvguxbkgmfre.supabase.co";
+   var SUPA_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzeGNpZ2FseXZndXhia2dtZnJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyODk4MDYsImV4cCI6MjEwNDg2NTgwNn0.C9Ioflo45PhalrTatYSHzbPooZ133T5jBW-nfZ07NGo";
   /* ================================================= */
 </script>
 <script>
@@ -352,7 +355,7 @@
   var stockEl,addBox,qtyEl,outEl,msgEl,tagEl,outMeta,searchEl,searchRes,histList,lowBanner;
   function lines(){ return stockEl.value.split(/\r?\n/).map(function(l){return l.trim();}).filter(Boolean); }
   function saveStock(){ schedulePersist(); }
-  function refresh(){ tagEl.textContent=lines().length; updateStats(); updateLow(); if(searchEl.value.trim()) doSearch(); }
+  function refresh(){ var n=lines().length; $("#stockNum").textContent=n; tagEl.classList.toggle("empty",n===0); updateStats(); updateLow(); if(searchEl.value.trim()) doSearch(); }
   function updateStats(){
     var hist=getHist(), today=new Date().toDateString(), t=0, all=0;
     hist.forEach(function(h){ all+=h.n; if(new Date(h.t).toDateString()===today) t+=h.n; });
